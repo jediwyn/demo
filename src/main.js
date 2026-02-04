@@ -1,6 +1,5 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import VueGtag from 'vue-gtag'
 
 // Google Analytics Measurement ID
 // 请将此处替换为你的 Google Analytics Measurement ID (格式: G-XXXXXXXXXX)
@@ -11,10 +10,13 @@ const app = createApp(App)
 
 // 配置 Google Analytics
 if (GA_MEASUREMENT_ID && GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX') {
-  app.use(VueGtag, {
-    config: {
-      id: GA_MEASUREMENT_ID
-    }
+  // 动态导入 vue-gtag，避免 Vite 构建错误
+  import('vue-gtag').then((VueGtag) => {
+    app.use(VueGtag.default, {
+      config: {
+        id: GA_MEASUREMENT_ID
+      }
+    })
   })
 }
 
